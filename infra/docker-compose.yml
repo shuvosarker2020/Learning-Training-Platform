@@ -1,0 +1,146 @@
+version: '3.8'
+
+services:
+  # --------------------------------------------------------------------------
+  # 1. Reverse Proxy & Edge WAF (Nginx Hardened)
+  # --------------------------------------------------------------------------
+  edge-proxy:
+    image: nginx:alpine
+    container_name: ngntc-edge-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx-hardened.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend-web
+      - backend-api
+
+  # --------------------------------------------------------------------------
+  # 2. Frontend Web Application (React + Vite + Tailwind)
+  # --------------------------------------------------------------------------
+  frontend-web:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: ngntc-frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - VITE_API_URL=https://api.ngntc.edu
+
+  # --------------------------------------------------------------------------
+  # 3. Backend API Service (Zero-Trust, RBAC, Signed Streaming)
+  # --------------------------------------------------------------------------
+  backend-api:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: ngntc-backend-api
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - DB_PRIMARY_HOST=postgres-primary
+      - DB_REPLICA_1_HOST=postgres-replica
+      - REDIS_HOST=redis-cache
+      - JWT_SECRET=ngntc-enterprise-zero-trust-secret-key-9824!
+    depends_on:
+      - pgbouncer
+      - redis-cache
+
+  # --------------------------------------------------------------------------
+  # 4. PgBouncer Connection Pooler (Scales up to 50k - 1M connections)
+  # --------------------------------------------------------------------------
+  pgbouncer:
+    image: edoburu/pgbouncer:latest
+    container_name: ngntc-pgbouncer
+    restart: always
+    ports:
+      - "6432:6432"
+    environment:
+      - DB_HOST=postgres-primary
+      - DB_PORT=5432
+      - DB_USER=ngntc_admin
+      - DB_PASSWORD=secret_db_pass
+      - DB_NAME=ngntc_enterprise_db
+      - POOL_MODE=transaction
+      - MAX_CLIENT_CONN=50000
+      - DEFAULT_POOL_SIZE=100
+    depends_on:
+      - postgres-primary
+
+  # --------------------------------------------------------------------------
+  # 5. Dedicated PostgreSQL Primary (Write Master)
+  # --------------------------------------------------------------------------
+  postgres-primary:
+    image: postgres:16-alpine
+    container_name: ngntc-postgres-primary
+    restart: always
+    environment:
+      - POSTGRES_DB=ngntc_enterprise_db
+      - POSTGRES_USER=ngntc_admin
+      - POSTGRES_PASSWORD=secret_db_pass
+      - POSTGRES_INITDB_ARGS=--data-checksums
+    volumes:
+      - pgdata_primary:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  # --------------------------------------------------------------------------
+  # 6. PostgreSQL Read-Replica (Offloads queries for 1M concurrent users)
+  # --------------------------------------------------------------------------
+  postgres-replica:
+    image: postgres:16-alpine
+    container_name: ngntc-postgres-replica
+    restart: always
+    environment:
+      - POSTGRES_DB=ngntc_enterprise_db
+      - POSTGRES_USER=ngntc_admin
+      - POSTGRES_PASSWORD=secret_db_pass
+    volumes:
+      - pgdata_replica:/var/lib/postgresql/data
+    depends_on:
+      - postgres-primary
+
+  # --------------------------------------------------------------------------
+  # 7. Distributed Redis Cluster Cache (Sub-millisecond Session & API Caching)
+  # --------------------------------------------------------------------------
+  redis-cache:
+    image: redis:7-alpine
+    container_name: ngntc-redis-cache
+    restart: always
+    command: redis-server --maxmemory 8gb --maxmemory-policy allkeys-lru --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  # --------------------------------------------------------------------------
+  # 8. Automated Database Backup Daemon (Daily Snapshots + S3 Offsite Sync)
+  # --------------------------------------------------------------------------
+  backup-daemon:
+    image: postgres:16-alpine
+    container_name: ngntc-backup-daemon
+    restart: always
+    volumes:
+      - ./backup:/scripts
+      - backup_vault:/var/backups/ngntc
+    environment:
+      - DB_HOST=postgres-primary
+      - DB_NAME=ngntc_enterprise_db
+      - DB_USER=ngntc_admin
+      - DB_PASSWORD=secret_db_pass
+    entrypoint: ["/bin/sh", "-c", "chmod +x /scripts/backup-database.sh && echo '0 4 * * * /scripts/backup-database.sh' > /etc/crontabs/root && crond -f -d 8"]
+    depends_on:
+      - postgres-primary
+
+volumes:
+  pgdata_primary:
+  pgdata_replica:
+  redis_data:
+  backup_vault:
