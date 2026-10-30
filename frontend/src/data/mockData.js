@@ -687,3 +687,278 @@ export const SYSTEM_METRICS_1M_SCALE = {
   rpoStatus: "< 60 seconds (Continuous WAL Archiving)",
   rtoStatus: "< 12 minutes (Automated Kubernetes Failover)"
 };
+
+// Current Admin Persona
+export const CURRENT_ADMIN = {
+  id: "ADM-001-EXEC",
+  name: "Marcus Sterling",
+  email: "admin@ngntc.edu",
+  avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=250",
+  role: "admin",
+  title: "Academy Chancellor & Director of Operations",
+  securityClearance: "Level-5 Master Superadmin"
+};
+
+// Admin Students Directory with Granular Access Control
+export const INITIAL_STUDENTS_LIST = [
+  {
+    id: "NGN-9842-SEC",
+    name: "Alex Rahman",
+    email: "alex.rahman@enterprise.ngntc.edu",
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250",
+    enrolledTrack: "AI-301: Enterprise AI & Autonomous Network Intelligence",
+    batch: "Cohort Alpha",
+    registeredDate: "2026-02-15",
+    paymentStatus: "Paid", // 'Paid' | 'Pending' | 'Overdue'
+    dueAmount: "$0",
+    dueDate: "2026-02-15",
+    certificationsEarned: ["5G Core Specialist", "Reinforcement Learning Ops"],
+    courseCompleted: true,
+    accessOptions: {
+      gpuSandbox: true,
+      p4SwitchLab: true,
+      videoVault: true,
+      examVouchers: true,
+      downloadVault: true
+    }
+  },
+  {
+    id: "NGN-9843-SEC",
+    name: "Tariq Mansoor",
+    email: "tariq.m@globaltelecom.com",
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200",
+    enrolledTrack: "NET-401: Next-Gen Software-Defined Networking & 5G/6G Core",
+    batch: "Cohort Alpha",
+    registeredDate: "2026-03-01",
+    paymentStatus: "Pending",
+    dueAmount: "$460",
+    dueDate: "2026-11-05", // Approaching due date
+    certificationsEarned: ["SDN Architect"],
+    courseCompleted: false,
+    accessOptions: {
+      gpuSandbox: false, // Restricted by admin pending payment
+      p4SwitchLab: true,
+      videoVault: true,
+      examVouchers: false, // Restricted
+      downloadVault: true
+    }
+  },
+  {
+    id: "NGN-9844-SEC",
+    name: "Chloe Vane",
+    email: "chloe.vane@cloudsec.io",
+    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200",
+    enrolledTrack: "SEC-601: Offensive Cyber Defense & Zero-Trust Architecture",
+    batch: "Cohort Beta",
+    registeredDate: "2026-03-10",
+    paymentStatus: "Overdue",
+    dueAmount: "$890",
+    dueDate: "2026-10-25", // Overdue!
+    certificationsEarned: [],
+    courseCompleted: false,
+    accessOptions: {
+      gpuSandbox: false,
+      p4SwitchLab: false,
+      videoVault: true,
+      examVouchers: false,
+      downloadVault: false
+    }
+  },
+  {
+    id: "NGN-9845-SEC",
+    name: "Liam O'Connor",
+    email: "liam.oc@infra-systems.net",
+    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200",
+    enrolledTrack: "SYS-501: Hyper-Scale Cloud Systems & Kubernetes Engineering",
+    batch: "Cohort Alpha",
+    registeredDate: "2026-03-12",
+    paymentStatus: "Paid",
+    dueAmount: "$0",
+    dueDate: "2026-03-12",
+    certificationsEarned: ["Cloud Fabric Architect", "CKS Specialist"],
+    courseCompleted: true,
+    accessOptions: {
+      gpuSandbox: true,
+      p4SwitchLab: true,
+      videoVault: true,
+      examVouchers: true,
+      downloadVault: true
+    }
+  },
+  {
+    id: "NGN-9846-GGL",
+    name: "Shuvo Sarker",
+    email: "shuvosarker2020@gmail.com",
+    avatar: "https://ui-avatars.com/api/?name=Shuvo+Sarker&background=0284c7&color=fff&size=200",
+    enrolledTrack: "AI-301: Enterprise AI & Autonomous Network Intelligence",
+    batch: "Cohort Alpha (Google Cohort)",
+    registeredDate: "2026-10-30",
+    paymentStatus: "Pending",
+    dueAmount: "$425",
+    dueDate: "2026-11-10",
+    certificationsEarned: [],
+    courseCompleted: false,
+    accessOptions: {
+      gpuSandbox: true,
+      p4SwitchLab: true,
+      videoVault: true,
+      examVouchers: true,
+      downloadVault: true
+    }
+  }
+];
+
+// Admin Trainers / Faculty Directory
+export const INITIAL_TRAINERS_LIST = [
+  {
+    id: "TRN-5012-FAC",
+    name: "Dr. Elena Rostova",
+    email: "elena.rostova@faculty.ngntc.edu",
+    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300",
+    department: "Autonomous Systems & AI",
+    assignedCourses: ["AI-301", "SYS-501"],
+    status: "Active Lead",
+    rating: 4.96,
+    studentsTrained: 18450,
+    credentials: "MIT CSAIL Ph.D., CCIE #49284"
+  },
+  {
+    id: "TRN-5013-FAC",
+    name: "Engr. Marcus Vance",
+    email: "marcus.vance@faculty.ngntc.edu",
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200",
+    department: "Next-Gen Optical & 5G/6G Networks",
+    assignedCourses: ["NET-401"],
+    status: "Active Lead",
+    rating: 4.95,
+    studentsTrained: 22800,
+    credentials: "CCIE #49284, 3GPP Delegate"
+  },
+  {
+    id: "TRN-5014-FAC",
+    name: "Sarah Jenkins",
+    email: "sarah.jenkins@faculty.ngntc.edu",
+    avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=200",
+    department: "Cloud Engineering & Distributed K8s",
+    assignedCourses: ["SYS-501"],
+    status: "Active Lead",
+    rating: 4.88,
+    studentsTrained: 18400,
+    credentials: "CNCF Ambassador, Staff SRE"
+  },
+  {
+    id: "TRN-5015-FAC",
+    name: "Dmitri Volkov",
+    email: "dmitri.volkov@faculty.ngntc.edu",
+    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200",
+    department: "Offensive Cyber Warfare & Zero-Trust",
+    assignedCourses: ["SEC-601"],
+    status: "Active Lead",
+    rating: 4.97,
+    studentsTrained: 16900,
+    credentials: "OSCP, Principal Threat Hunter"
+  }
+];
+
+// Admin Payments & Billing Directory
+export const INITIAL_PAYMENTS_LIST = [
+  {
+    invoiceId: "INV-2026-8801",
+    studentId: "NGN-9842-SEC",
+    studentName: "Alex Rahman",
+    studentEmail: "alex.rahman@enterprise.ngntc.edu",
+    courseCode: "AI-301",
+    amount: "$850",
+    status: "Paid", // 'Paid' | 'Pending' | 'Overdue'
+    paymentMethod: "Credit Card (Visa •••• 4242)",
+    paidDate: "2026-02-15",
+    dueDate: "2026-02-15",
+    remindersSent: 0
+  },
+  {
+    invoiceId: "INV-2026-8802",
+    studentId: "NGN-9843-SEC",
+    studentName: "Tariq Mansoor",
+    studentEmail: "tariq.m@globaltelecom.com",
+    courseCode: "NET-401",
+    amount: "$460",
+    status: "Pending",
+    paymentMethod: "bKash Merchant Pay",
+    paidDate: "-",
+    dueDate: "2026-11-05", // Approaching due date
+    remindersSent: 1
+  },
+  {
+    invoiceId: "INV-2026-8803",
+    studentId: "NGN-9844-SEC",
+    studentName: "Chloe Vane",
+    studentEmail: "chloe.vane@cloudsec.io",
+    courseCode: "SEC-601",
+    amount: "$890",
+    status: "Overdue",
+    paymentMethod: "Corporate PO pending",
+    paidDate: "-",
+    dueDate: "2026-10-25", // Overdue by 6 days
+    remindersSent: 3
+  },
+  {
+    invoiceId: "INV-2026-8804",
+    studentId: "NGN-9845-SEC",
+    studentName: "Liam O'Connor",
+    studentEmail: "liam.oc@infra-systems.net",
+    courseCode: "SYS-501",
+    amount: "$790",
+    status: "Paid",
+    paymentMethod: "PayPal Enterprise",
+    paidDate: "2026-03-12",
+    dueDate: "2026-03-12",
+    remindersSent: 0
+  },
+  {
+    invoiceId: "INV-2026-8805",
+    studentId: "NGN-9846-GGL",
+    studentName: "Shuvo Sarker",
+    studentEmail: "shuvosarker2020@gmail.com",
+    courseCode: "AI-301",
+    amount: "$425",
+    status: "Pending",
+    paymentMethod: "Direct Bank Transfer",
+    paidDate: "-",
+    dueDate: "2026-11-10",
+    remindersSent: 0
+  }
+];
+
+// Dispatched Emails & Notifications Log
+export const INITIAL_EMAIL_DISPATCH_LOGS = [
+  {
+    id: "EML-101",
+    recipient: "shuvosarker2020@gmail.com",
+    recipientName: "Shuvo Sarker",
+    type: "payment-reminder",
+    subject: "Action Required: Tuition Payment Due Reminder (AI-301)",
+    time: "Today at 09:15 AM",
+    status: "Delivered (250 OK)",
+    provider: "AWS SES / SendGrid"
+  },
+  {
+    id: "EML-102",
+    recipient: "alex.rahman@enterprise.ngntc.edu",
+    recipientName: "Alex Rahman",
+    type: "certification",
+    subject: "Congratulations! Your Official NGN-CNA Certificate Has Been Issued",
+    time: "Yesterday at 04:30 PM",
+    status: "Delivered (250 OK)",
+    provider: "AWS SES / SendGrid"
+  },
+  {
+    id: "EML-103",
+    recipient: "all-students@ngntc.edu (482 recipients)",
+    recipientName: "Cohort Alpha & Beta Students",
+    type: "broadcast",
+    subject: "System Update: Kernel eBPF 100Gbps Lab Cluster Now Live",
+    time: "2 days ago",
+    status: "Delivered (100% Success)",
+    provider: "AWS SES Broadcast Queue"
+  }
+];

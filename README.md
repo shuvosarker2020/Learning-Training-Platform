@@ -7,30 +7,42 @@
 
 ## 🌟 What's New in this Release
 
-1. **Student Signup & Automated Resource Allocation**:
-   - Students can register with their name, email, and preferred track.
-   - Generates unique student credentials (`NGN-XXXX-SEC`) and immediately provisions assigned GPU cloud sandboxes, virtual P4 switch appliances, lab manuals, and exam vouchers.
-   - Dedicated **[Assigned Resources Dashboard](frontend/src/pages/AssignedResources.jsx)** with 1-click sandbox launch.
+1. **Executive Admin Dashboard & Demand-Driven Management**:
+   - Dedicated master operations hub ([`AdminDashboard.jsx`](frontend/src/pages/AdminDashboard.jsx)) managed by Chancellor Marcus Sterling.
+   - Comprehensive telemetry: Total Students, Total Trainers, Revenue Collected, Outstanding Payments, Schedulers.
+   - Manage students and faculty leads with search, filters, and batch tracking.
 
-2. **Trainer / Instructor Signup & Profiling**:
-   - Comprehensive faculty registration with academic credentials, industry certifications (CCIE, AWS SA Pro, CKS, PhD), specializations, ratings, and social links.
-   - **[Trainer Studio](frontend/src/pages/TrainerStudio.jsx)**: Manage cohort student rosters, review progress, and schedule classes.
+2. **Granular Student Access Control ("Access as Defined Options")**:
+   - Admins can configure and toggle resource access on demand per student:
+     - ⚡ Dedicated GPU Cloud Sandbox (8x A100 Pod)
+     - 🌐 P4 BMv2 Virtual Switch Appliance
+     - 🔒 4K DRM Video Vault
+     - 🏆 Proctored Certification Exam Vouchers
+     - 📄 Architecture Blueprints & PCAP Vault
+   - Changes take effect live: if a resource is toggled off by the Admin, the student's [`AssignedResources.jsx`](frontend/src/pages/AssignedResources.jsx) immediately locks the resource with an admin governance badge and disables launch until cleared.
 
-3. **How Students Join via Invitation Links**:
-   - **[JoinLinkModal](frontend/src/components/JoinLinkModal.jsx)**: Students can paste or click an invite URL (e.g. `https://ngntc.edu/join?code=NGN-AI-2026-ALPHA`).
-   - Instantly validates the cryptographic token and auto-enrolls the student into their cohort, unlocking all required resources.
+3. **Financial Due Governance & Increase Payment Time**:
+   - View all invoices: Paid, Pending, and Overdue.
+   - **Extend Payment Due Date**: 1-click grace period extension (+7, +14, +21, +30 days) to increase pay time.
+   - **Manual Payment Override**: Mark invoices as paid via offline bank transfer or corporate purchase order.
+   - **Payment Due Notification Engine**:
+     - Automated daily daemon (09:00 AM Cron) sweeps pending/overdue invoices.
+     - Manual 1-click *"Send Reminder"* button for any invoice.
 
-4. **Free Open-Source & Multi-Platform Meeting Creator**:
-   - Trainers can generate zero-cost meeting links using **Jitsi Meet (100% Free Open Source)** with zero account requirement, unlimited meeting duration, and HD screen share.
-   - Also supports **Google Meet**, **Microsoft Teams**, **Zoom**, **Cisco Webex**, and **On-Demand streaming**.
-   - Generates sharable student links, 1-click copy buttons, and automated alerts to enrolled batches.
+4. **Broadcast Updates & Course Completion / Certification Notifications**:
+   - **Broadcast Updates**: Send announcements to all registered emails (Students, Trainers, or Everyone) with priority flags and AWS SES / SendGrid relay logging.
+   - **Course Completion & Certification Dispatch**: Automatically or manually triggers official credential emails with unique verification hashes (`0x...`) and verifiable certificate links when a student finishes a course or passes an exam.
 
-5. **Website Multi-Theme Customizer**:
-   - Switch between **4 custom themes** anytime with 1 click in the top navigation bar:
-     - ⚡ **Cyber Dark (Default)**: Deep Obsidian & Electric Cyan
-     - 🟢 **Matrix Terminal**: True Black & Emerald Hacker Mode
-     - 🟣 **Neural Violet**: Deep Space Violet for AI & Neural modeling
-     - ☀️ **Enterprise Light**: Clean White/Slate for corporate boardroom presentations
+5. **Sign Up with Any Existing Gmail**:
+   - One-click Google OAuth button in the navbar and signup modal.
+   - Google Account Chooser allows selecting detected accounts or typing any existing `@gmail.com` address to auto-generate verified profiles.
+
+6. **Free Open-Source & Multi-Platform Meeting Creator**:
+   - 100% Free Open-Source rooms via **Jitsi Meet** (no account needed, no 40-min limit, HD screen share).
+   - Also integrates **Google Meet**, **Microsoft Teams**, **Zoom**, **Cisco Webex**, and **On-Demand streaming**.
+
+7. **Website Multi-Theme Customizer**:
+   - ⚡ **Cyber Dark (Default)**, 🟢 **Matrix Terminal**, 🟣 **Neural Violet**, ☀️ **Enterprise Light**.
 
 ---
 
@@ -38,18 +50,18 @@
 
 | Feature | Implementation | Capabilities |
 | :--- | :--- | :--- |
-| **Student Signup & Resources** | [`AssignedResources.jsx`](frontend/src/pages/AssignedResources.jsx) | Dedicated sandboxes, BMv2 switch emulators, exam vouchers, live sessions. |
-| **Trainer Profiling & Studio** | [`TrainerStudio.jsx`](frontend/src/pages/TrainerStudio.jsx) | Bio, credentials (CCIE, PhD), ratings, batch rosters, class creator. |
-| **Join Link Flow** | [`JoinLinkModal.jsx`](frontend/src/components/JoinLinkModal.jsx) | Cryptographic invite tokens with 1-click auto-enrollment. |
-| **Free Meeting Generator** | Jitsi Meet, Google Meet, Teams, WebEx, Zoom | Free open-source rooms (`meet.jit.si`) or enterprise video conferencing. |
+| **Admin Operations Hub** | [`AdminDashboard.jsx`](frontend/src/pages/AdminDashboard.jsx) | Total students, trainers, revenue, dues, broadcast engine, and email dispatch audit. |
+| **Defined Student Access** | [`AssignedResources.jsx`](frontend/src/pages/AssignedResources.jsx) | Live admin permission toggles for GPU sandboxes, P4 labs, video vaults, and exams. |
+| **Payment Due & Extension** | [`AdminDashboard.jsx`](frontend/src/pages/AdminDashboard.jsx) | Extend due dates (+7 to +30 days), mark paid manually, automated/manual email alerts. |
+| **Email & Broadcasts** | [`server.js`](backend/src/server.js) | Broadcast announcements & certification achievement emails sent to registered emails. |
+| **Gmail OAuth Signup** | [`AuthModal.jsx`](frontend/src/components/AuthModal.jsx) | Sign up or sign in using any existing Gmail with instant account provisioning. |
+| **Trainer Studio & Links** | [`TrainerStudio.jsx`](frontend/src/pages/TrainerStudio.jsx) | Faculty bio, CCIE/PhD credentials, batch rosters, free Jitsi/Meet meeting creator. |
+| **Join Link Flow** | [`JoinLinkModal.jsx`](frontend/src/components/JoinLinkModal.jsx) | Cryptographic invite tokens with 1-click cohort auto-enrollment. |
 | **Multi-Theme Switcher** | [`Navbar.jsx`](frontend/src/components/Navbar.jsx) & [`index.css`](frontend/src/index.css) | Cyber Dark, Matrix Terminal, Neural Violet, Enterprise Light. |
-| **Live Training Streamer** | [`LiveClass.jsx`](frontend/src/pages/LiveClass.jsx) | WebRTC live stream player, live Q&A chat, collaborative code editor. |
-| **Class Video Share** | [`VideoLectures.jsx`](frontend/src/pages/VideoLectures.jsx) | HLS player with **Dynamic Student ID Watermarking** to stop leaks. |
+| **Class Video Share** | [`VideoLectures.jsx`](frontend/src/pages/VideoLectures.jsx) | HLS player with **Dynamic Student ID Watermarking** to prevent recording leaks. |
 | **Timed Exam Engine** | [`ExamPortal.jsx`](frontend/src/pages/ExamPortal.jsx) | 45-min timer, question navigator, auto-grading, verifiable certificates. |
-| **Payment Options** | [`Payments.jsx`](frontend/src/pages/Payments.jsx) | Credit/Debit (Stripe), MFS (bKash/Nagad), PayPal, Corporate PO. |
-| **Separate Database** | Multi-Tenant Isolated DB Instances | Primary Master (Writes) + 6 Read-Replicas + PgBouncer (50k conns). |
-| **Backup Process** | Automated Daily Encrypted Snapshots | Zstd level 9, AES-256-GCM, off-site geo-replicated S3 cold storage. |
-| **1M Concurrent Scale** | Distributed Cloud-Native Infrastructure | Kubernetes HPA (up to 1,000 pods), Redis Cluster L1/L2, Anycast CDN. |
+| **1M Concurrent Scale** | Kubernetes HPA & Redis Cluster | Autoscaling from 20 to 1,000 pods, PgBouncer pooler (50k conns), 98.7% cache hit rate. |
+| **Automated Backups** | [`backup-database.sh`](infra/backup/backup-database.sh) | Daily snapshots, Zstd level 9, AES-256-GCM encryption, S3 off-site sync (RPO < 60s). |
 
 ---
 

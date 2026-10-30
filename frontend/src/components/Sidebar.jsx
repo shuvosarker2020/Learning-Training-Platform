@@ -16,7 +16,9 @@ import {
   Layers,
   ShieldAlert,
   Users,
-  Video
+  Video,
+  Sliders,
+  Mail
 } from 'lucide-react';
 
 export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen, currentRole }) {
@@ -32,7 +34,8 @@ export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen, cu
     { id: 'profile', label: 'Student Profile & Progress', icon: UserCheck },
     { id: 'documents', label: 'Lab Guides & Docs', icon: FolderDown },
     { id: 'payments', label: 'Payment Gateway', icon: CreditCard },
-    { id: 'admin-security', label: 'Scale & Security (1M)', icon: ServerCog, highlight: true },
+    { id: 'admin-dashboard', label: 'Admin Operations', icon: Sliders, badge: 'Admin', highlight: true },
+    { id: 'admin-security', label: 'Scale & Security (1M)', icon: ServerCog },
   ];
 
   // Trainer items
@@ -43,10 +46,29 @@ export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen, cu
     { id: 'videos', label: 'Video Lecture Vault', icon: PlaySquare },
     { id: 'exams', label: 'Exams & Certifications', icon: Award },
     { id: 'documents', label: 'Lab Guides & Docs', icon: FolderDown },
-    { id: 'admin-security', label: 'Scale & Security (1M)', icon: ServerCog, highlight: true },
+    { id: 'admin-dashboard', label: 'Admin Operations', icon: Sliders, badge: 'Admin', highlight: true },
+    { id: 'admin-security', label: 'Scale & Security (1M)', icon: ServerCog },
   ];
 
-  const navItems = currentRole === 'trainer' ? trainerNavItems : studentNavItems;
+  // Admin items
+  const adminNavItems = [
+    { id: 'admin-dashboard', label: 'Admin Control Center', icon: Sliders, badge: 'Executive', highlight: true },
+    { id: 'assigned-resources', label: 'Student Resource View', icon: FolderLock },
+    { id: 'trainer-studio', label: 'Faculty Studio View', icon: Briefcase },
+    { id: 'courses', label: 'Courses & Curriculum', icon: BookOpen },
+    { id: 'live', label: 'Live Class Streamer', icon: Radio },
+    { id: 'videos', label: 'Video Lecture Vault', icon: PlaySquare },
+    { id: 'exams', label: 'Exams & Certifications', icon: Award },
+    { id: 'documents', label: 'Lab Guides & Docs', icon: FolderDown },
+    { id: 'payments', label: 'Payment Gateway', icon: CreditCard },
+    { id: 'admin-security', label: 'Scale & Security (1M)', icon: ServerCog },
+  ];
+
+  const navItems = currentRole === 'admin' 
+    ? adminNavItems 
+    : currentRole === 'trainer' 
+    ? trainerNavItems 
+    : studentNavItems;
 
   const handleSelect = (id) => {
     setActiveTab(id);
@@ -75,10 +97,12 @@ export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen, cu
           <div>
             <div className="flex items-center justify-between px-3 mb-2">
               <span className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-bold">
-                {currentRole === 'trainer' ? 'Faculty Studio' : 'Student Academy'}
+                {currentRole === 'admin' ? 'Executive Portal' : currentRole === 'trainer' ? 'Faculty Studio' : 'Student Academy'}
               </span>
               <span className={`text-[10px] font-mono font-bold px-1.5 py-0.2 rounded uppercase ${
-                currentRole === 'trainer' 
+                currentRole === 'admin'
+                  ? 'bg-amber-950 text-amber-400 border border-amber-800'
+                  : currentRole === 'trainer' 
                   ? 'bg-purple-950 text-purple-400 border border-purple-800'
                   : 'bg-cyan-950 text-cyan-400 border border-cyan-800'
               }`}>
@@ -98,7 +122,7 @@ export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen, cu
                       isActive
                         ? 'bg-gradient-to-r from-cyan-950 to-blue-950/40 text-cyan-400 border border-cyan-800/60 shadow-lg shadow-cyan-950/50'
                         : item.highlight
-                        ? 'text-slate-300 hover:text-cyan-300 hover:bg-slate-900 border border-transparent hover:border-slate-800'
+                        ? 'text-cyan-300 hover:text-cyan-200 hover:bg-slate-900 border border-cyan-900/40'
                         : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
                     }`}
                   >
@@ -118,7 +142,9 @@ export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen, cu
 
                     {item.badge && (
                       <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono ${
-                        currentRole === 'trainer'
+                        item.badge === 'Admin' || item.badge === 'Executive'
+                          ? 'bg-amber-950 text-amber-400 border border-amber-800'
+                          : currentRole === 'trainer'
                           ? 'bg-purple-950 text-purple-400 border border-purple-800'
                           : 'bg-cyan-950 text-cyan-400 border border-cyan-800'
                       }`}>

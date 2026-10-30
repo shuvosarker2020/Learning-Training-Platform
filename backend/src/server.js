@@ -266,6 +266,88 @@ app.post('/api/payments/process', (req, res) => {
   });
 });
 
+// --- ADMIN OPERATIONS & NOTIFICATION ENGINE ---
+
+// Broadcast Any Update to Registered Emails
+app.post('/api/admin/broadcast', (req, res) => {
+  const { audience, subject, message, priority = 'Normal' } = req.body;
+  const dispatchId = `BRD-${Date.now()}`;
+
+  res.json({
+    success: true,
+    dispatchId,
+    audience: audience || 'all-students',
+    subject,
+    priority,
+    sentCount: audience === 'everyone' ? 486 : 482,
+    deliveryStatus: 'Queued for SMTP Relay (AWS SES)',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Extend Payment Due Date / Increase Pay Time
+app.post('/api/admin/payments/extend-due', (req, res) => {
+  const { invoiceId, studentId, studentEmail, extensionDays } = req.body;
+  const days = parseInt(extensionDays || '7', 10);
+  const newDueDate = new Date();
+  newDueDate.setDate(newDueDate.getDate() + days);
+
+  res.json({
+    success: true,
+    invoiceId,
+    studentId,
+    extensionDays: days,
+    revisedDueDate: newDueDate.toISOString().slice(0, 10),
+    notificationSent: true,
+    recipientEmail: studentEmail,
+    message: `Payment due date extended by +${days} days. Notification dispatched to registered email.`
+  });
+});
+
+// Send Payment Due Notification (Manual or Automated Daemon)
+app.post('/api/admin/payments/remind', (req, res) => {
+  const { invoiceId, studentName, studentEmail, amount, dueDate } = req.body;
+
+  res.json({
+    success: true,
+    invoiceId,
+    studentEmail,
+    amount,
+    dueDate,
+    deliveredVia: 'AWS SES / SendGrid',
+    responseCode: '250 OK (Message Queued)',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Update Student Defined Access Options
+app.post('/api/admin/students/access-options', (req, res) => {
+  const { studentId, accessOptions } = req.body;
+
+  res.json({
+    success: true,
+    studentId,
+    updatedAccessOptions: accessOptions,
+    message: 'Student access governance options updated successfully.'
+  });
+});
+
+// Course Completion & Certification Achievement Notification
+app.post('/api/admin/notifications/certification', (req, res) => {
+  const { studentId, studentName, studentEmail, certificationTitle, credentialHash } = req.body;
+
+  res.json({
+    success: true,
+    studentId,
+    studentEmail,
+    certificationTitle: certificationTitle || 'NGN-CNA Certified Network Architect',
+    credentialHash: credentialHash || `0x${Math.random().toString(16).slice(2, 18)}`,
+    certificateUrl: `https://ngntc.edu/verify/cert-${studentId}`,
+    message: 'Official completion credential and verifiable certificate dispatched to registered email.',
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Start Server
 app.listen(PORT, () => {
   console.log(`🚀 Next Generation Network Training Centre (NGNTC) API`);
